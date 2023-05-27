@@ -244,15 +244,21 @@ def _is_master_process():
 def load_pretrained_model(local_rank):
     # TODO: Load a pretrained AutoModelForCausalLM from the 'model_path' in float16 data type. 
     # Make sure to set 'device_map' to '{"": torch.device(f"cuda:{local_rank}")}' for DDP training.
-
-    model = None ### YOUR CODE HERE ###
+    model = AutoModelForCausalLM.from_pretrained(model_path)
 
     # TODO: Create a LoraConfig with the parameters: r=8, lora_alpha=16, 
     # lora_dropout=0.05, bias="none", task_type="CAUSAL_LM".
     # We will then use the config to initialize a LoraModelForCasualLM with the loaded model. 
     # Then, print the trainable parameters of the model.
 
-    lora_config = None ### YOUR CODE HERE ###
+    lora_config = LoraConfig(
+        r=8,
+        lora_alpha=16,
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM",
+        local_rank=local_rank
+    )
 
     # Create LoRA model
     model = LoraModelForCasualLM(model, lora_config)
