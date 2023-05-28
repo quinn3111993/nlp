@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 
 from peft import LoraConfig, get_peft_model
-from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM, DataCollatorForSeq2Seq
 
 from contextlib import nullcontext
 
@@ -14,8 +14,9 @@ from prepare_data import create_datasets
 from torch.distributed import init_process_group, destroy_process_group
 
 # ADDED CODE
-from torch.utils.data import DataLoader, SequentialSampler, DataCollatorForSeq2Seq
+from torch.utils.data import DataLoader, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
+
 
 
 import warnings
