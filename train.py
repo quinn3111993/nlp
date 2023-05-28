@@ -300,8 +300,8 @@ if __name__ == "__main__":
     eval_freq = 150
     
     # TODO: Choose strategy
-    # distributed_strategy = "no"
-    distributed_strategy = "ddp"
+    distributed_strategy = "no"
+    # distributed_strategy = "ddp"
     
     if distributed_strategy  == "ddp":
         # TODO: Initialize the process group for distributed data parallelism with nccl backend.
@@ -309,7 +309,7 @@ if __name__ == "__main__":
         # Initialize the process group ### YOUR CODE HERE ###
         os.environ['RANK'] = '0'
         local_rank = int(os.environ['RANK'])
-        init_process_group(backend=backend, rank=local_rank, world_size=1)
+        init_process_group(backend=backend, rank=local_rank, world_size=1, master_addr='127.0.0.1')
         
     else:
         os.environ['RANK'] = '0'
