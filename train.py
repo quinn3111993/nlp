@@ -14,7 +14,8 @@ from prepare_data import create_datasets
 from torch.distributed import init_process_group, destroy_process_group
 
 # ADDED CODE
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, SequentialSampler, DataCollatorForSeq2Seq
+from torch.utils.data.distributed import DistributedSampler
 
 
 import warnings
@@ -155,7 +156,7 @@ class Trainer:
         # use 'DistributedSampler' for 'sampler' argument, else use 'None'.
         # Use 'DataCollatorForSeq2Seq' for 'collate_fn', passing 'tokenizer', padding settings, and return_tensors="pt".
         
-        data_trainloader = DataLoader(train_dataset, batch_size=self.batch_size, sampler=(DistributedSampler(train_dataset) if is_ddp_training else None), collate_fn=DataCollatorForSeq2Seq(tokenizer=self.tokenizer, padding=True, return_tensors="pt"))
+        data_trainloader = DataLoader(train_dataset, batch_size=self.batch_size, sampler=(DistributedSampler(train_dataset) if self.is_ddp_training else None), collate_fn=DataCollatorForSeq2Seq(tokenizer=self.tokenizer, padding=True, return_tensors="pt"))
 
         # TODO: Prepare the evaluation DataLoader. Initialize 'DataLoader' with 'eval_dataset', 
         # the appropriate 'batch_size', and 'SequentialSampler' for 'sampler'.
