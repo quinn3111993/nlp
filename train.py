@@ -62,8 +62,10 @@ class Trainer:
 
         # TODO: Setup mixed precision training context. If 'mixed_precision_dtype' is None, use 'nullcontext', 
         # otherwise use 'torch.amp.autocast' with the specified dtype.
-        mixed_precision_dtype = torch.float16
-        self.ctx = nullcontext() if mixed_precision_dtype is None else torch.amp.autocast(device_type='cuda', dtype=mixed_precision_dtype)
+        mixed_precision_dtype = None ### YOUR CODE HERE ###
+        self.ctx = nullcontext() ### YOUR CODE HERE ###
+        # mixed_precision_dtype = torch.float16
+        # self.ctx = nullcontext() if mixed_precision_dtype is None else torch.amp.autocast(device_type='cuda', dtype=mixed_precision_dtype)
         
 
     def _set_ddp_training(self):
@@ -253,15 +255,7 @@ def load_pretrained_model(local_rank):
     # lora_dropout=0.05, bias="none", task_type="CAUSAL_LM".
     # We will then use the config to initialize a LoraModelForCasualLM with the loaded model. 
     # Then, print the trainable parameters of the model.
-
-    lora_config = LoraConfig(
-        r=8,
-        lora_alpha=16,
-        lora_dropout=0.05,
-        bias="none",
-        task_type="CAUSAL_LM",
-        local_rank=local_rank
-    )
+    lora_config = LoraConfig(r=8, lora_alpha=16, lora_dropout=0.05, bias="none", task_type="CAUSAL_LM")
 
     # Create LoRA model
     model = LoraModelForCasualLM(model, lora_config)
