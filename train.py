@@ -309,7 +309,7 @@ if __name__ == "__main__":
         
         # Initialize the process group ### YOUR CODE HERE ###
         os.environ['LOCAL_RANK'] = '0'
-        init_process_group(backend=backend)
+        init_process_group(backend=backend, init_method="env://")
         local_rank = int(os.environ['LOCAL_RANK'])
     else:
         os.environ['RANK'] = '0'
