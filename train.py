@@ -307,7 +307,7 @@ if __name__ == "__main__":
         # TODO: Initialize the process group for distributed data parallelism with nccl backend.
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
         # Initialize the process group ### YOUR CODE HERE ###
-        local_rank = int(os.environ['LOCAL_RANK'])
+        local_rank = int(os.environ['RANK'])
         init_process_group(backend=backend, rank=local_rank)
         
     else:
