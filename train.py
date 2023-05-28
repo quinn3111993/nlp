@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 
 from peft import LoraConfig, get_peft_model
-from transformers import AutoConfig, AutoTokenizer
+from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM
 
 from contextlib import nullcontext
 
@@ -304,7 +304,9 @@ if __name__ == "__main__":
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
         
         # Initialize the process group ### YOUR CODE HERE ###
-        local_rank = None ### YOUR CODE HERE ###
+        init_process_group(backend=backend)
+
+        local_rank = int(os.environ['LOCAL_RANK'])
     else:
         os.environ['RANK'] = '0'
         local_rank = 0
