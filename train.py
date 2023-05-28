@@ -11,7 +11,7 @@ from contextlib import nullcontext
 from lora_model import LoraModelForCasualLM
 from utils.common import download_from_driver
 from prepare_data import create_datasets
-from torch.distributed import  destroy_process_group
+from torch.distributed import init_process_group, destroy_process_group
 
 # ADDED CODE
 from torch.utils.data import DataLoader, Dataset
