@@ -285,7 +285,7 @@ def load_pretrained_model(local_rank):
     # TODO: Load a pretrained AutoModelForCausalLM from the 'model_path' in float16 data type.
     # Make sure to set 'device_map' to '{"": torch.device(f"cuda:{local_rank}")}' for DDP training.
     # model = None ### YOUR CODE HERE ###
-    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16)
+    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map="auto")
 
     # TODO: Create a LoraConfig with the parameters: r=8, lora_alpha=16,
     # lora_dropout=0.05, bias="none", task_type="CAUSAL_LM".
@@ -297,7 +297,7 @@ def load_pretrained_model(local_rank):
     )
 
     # Create LoRA model
-    model = LoraModelForCasualLM(model, lora_config).cuda()
+    model = LoraModelForCasualLM(model, lora_config)
     # model = get_peft_model(model, lora_config) # Uncomment this line to use PEFT library instead of your implementation in `lora_layer.py`.
     if _is_master_process():
         model.print_trainable_parameters()
