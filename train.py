@@ -38,7 +38,7 @@ class Trainer:
         tokenizer,
         gpu_id: int,
         is_ddp_training: bool = True,
-        output_dir: str = "https://drive.google.com/drive/folders/15OnJdmJDhZwg4MkWtMAbTcEx2Qykndnd?usp=sharing",
+        output_dir: str = "checkpoints/",
         num_epochs: int = 10,
         max_length: int = 128,
         batch_size: int = 8,
@@ -336,7 +336,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 
 if __name__ == "__main__":
-    OUTPUT_DIR = "checkpoints/"
+    OUTPUT_DIR = "https://drive.google.com/drive/folders/15OnJdmJDhZwg4MkWtMAbTcEx2Qykndnd?usp=sharing"
     DRIVER_DATA_PATH = "https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing"
 
     backend = "nccl"
