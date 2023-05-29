@@ -21,6 +21,7 @@ from torch.distributed import init_process_group, destroy_process_group
 # ADDED CODE
 from torch.utils.data import DataLoader, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
+from torch.cuda.amp import GradScaler
 
 
 import warnings
@@ -41,7 +42,7 @@ class Trainer:
         num_epochs: int = 10,
         max_length: int = 128,
         batch_size: int = 8,
-        mixed_precision_dtype=None,
+        mixed_precision_dtype=torch.float16,
         gradient_accumulation_steps: int = 16,
     ):
         """
@@ -81,8 +82,8 @@ class Trainer:
             self.ctx = nullcontext()
         else:
             # TODO Otherwise, use 'torch.amp.autocast' context with the specified dtype, and initialize GradScaler if mixed_precision_dtype is float16.
-            self.ctx = None  ### YOUR CODE HERE ###
-            self.gradscaler = None  ### YOUR CODE HERE ###
+            self.ctx = torch.amp.autocast(device_type='cuda', dtype=mixed_precision_dtype)
+            self.gradscaler = GradScaler()
 
     def _set_ddp_training(self):
         # TODO: Initialize the DistributedDataParallel wrapper for the model.
@@ -109,7 +110,10 @@ class Trainer:
         # TODO: If 'mixed_precision_dtype' is torch.float16, you have to modify the backward using the gradscaler.
         if self.mixed_precision_dtype == torch.float16:
             ### YOUR CODE HERE ###
-            pass
+            self.gradscaler.scale(loss).backward()
+            self.gradscaler.step(self.optimizer)
+            self.gradscaler.update()
+            # pass
         else:
             loss.backward()
 
@@ -154,7 +158,9 @@ class Trainer:
                 if self.mixed_precision_dtype == torch.float16:
                     ### YOUR CODE HERE ###
                     # TODO: optimizer step
-                    # TODO: update scaler factor
+                    self.gradscaler.step(self.optimizer)
+                    # TODO: update scaler
+                    self.gradscaler.update()
                     pass
                 else:
                     self.optimizer.step()
@@ -378,7 +384,7 @@ if __name__ == "__main__":
         max_length=max_length,
         batch_size=batch_size,
         gpu_id=local_rank,
-        # mixed_precision_dtype = mixed_precision_dtype,
+        mixed_precision_dtype = mixed_precision_dtype,
         tokenizer=tokenizer,
         output_dir=OUTPUT_DIR,
         is_ddp_training=True if distributed_strategy == "ddp" else False,
