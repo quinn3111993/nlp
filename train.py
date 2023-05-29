@@ -89,7 +89,11 @@ class Trainer:
         # TODO: Initialize the DistributedDataParallel wrapper for the model.
         # You would need to pass the model and specify the device IDs
         # and output device for the data parallelism.
-        self.model = None  ### YOUR CODE HERE ###
+        self.model = torch.nn.parallel.DistributedDataParallel(
+            self.model,
+            device_ids=[self.gpu_id],
+            output_device=self.gpu_id
+        )
 
     def _run_batch(self, batch):
         """
@@ -193,12 +197,11 @@ class Trainer:
         data_trainloader = DataLoader(
             train_dataset,
             batch_size=self.batch_size,
-            sampler=None,
+            sampler=DistributedSampler(train_dataset) if self.is_ddp_training else None,
             collate_fn=DataCollatorForSeq2Seq(
                 tokenizer=self.tokenizer, padding=True, return_tensors="pt"
-            ),
+            )
         )
-        # data_trainloader = DataLoader(train_dataset, batch_size=self.batch_size, sampler=(DistributedSampler(train_dataset) if self.is_ddp_training else None), collate_fn=DataCollatorForSeq2Seq(tokenizer=self.tokenizer, padding=True, return_tensors="pt"))
 
         # TODO: Prepare the evaluation DataLoader. Initialize 'DataLoader' with 'eval_dataset',
         # the appropriate 'batch_size', and 'SequentialSampler' for 'sampler'.
@@ -311,7 +314,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
     # Make sure to set 'device_map' to '{"": torch.device(f"cuda:{local_rank}")}' for DDP training.
 
     model = AutoModelForCausalLM.from_pretrained(
-        model_path, torch_dtype=torch.float16, device_map="auto"
+        model_path, torch_dtype=torch.float16, device_map={"": torch.device(f"cuda:{local_rank}")}
     )
 
     # TODO: Create a LoraConfig with the parameters: r=8, lora_alpha=16,
@@ -364,13 +367,15 @@ if __name__ == "__main__":
 
     # TODO: Choose strategy
     distributed_strategy = "no"  ### YOUR CODE HERE ###
+    distributed_strategy = "ddp"
 
     if distributed_strategy == "ddp":
         # TODO: Initialize the process group for distributed data parallelism with nccl backend.
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
 
         # Initialize the process group ### YOUR CODE HERE ###
-        local_rank = None  ### YOUR CODE HERE ###
+        init_process_group(backend=backend)
+        local_rank = int(os.environ["LOCAL_RANK"])
     else:
         os.environ["RANK"] = "0"
         local_rank = 0
