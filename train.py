@@ -38,7 +38,7 @@ class Trainer:
         tokenizer,
         gpu_id: int,
         is_ddp_training: bool = True,
-        output_dir: str = "checkpoints/",
+        output_dir: str = "https://drive.google.com/drive/folders/15OnJdmJDhZwg4MkWtMAbTcEx2Qykndnd?usp=sharing",
         num_epochs: int = 10,
         max_length: int = 128,
         batch_size: int = 8,
