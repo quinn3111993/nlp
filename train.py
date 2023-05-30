@@ -382,7 +382,7 @@ if __name__ == "__main__":
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
 
         # Initialize the process group ### YOUR CODE HERE ###
-        init_process_group(backend=backend)
+        init_process_group(backend=backend, world_size=2)
         local_rank = int(os.environ["LOCAL_RANK"])
     else:
         os.environ["RANK"] = "0"
