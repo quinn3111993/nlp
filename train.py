@@ -22,6 +22,7 @@ from torch.distributed import init_process_group, destroy_process_group
 from torch.utils.data import DataLoader, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 from torch.cuda.amp import GradScaler
+import shutil
 
 
 import warnings
@@ -339,7 +340,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 
 if __name__ == "__main__":
-    OUTPUT_DIR = "https://drive.google.com/drive/folders/15OnJdmJDhZwg4MkWtMAbTcEx2Qykndnd?usp=sharing"
+    OUTPUT_DIR = "checkpoints/"
     DRIVER_DATA_PATH = "https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing"
 
     backend = "nccl"
@@ -408,8 +409,13 @@ if __name__ == "__main__":
     # set ddp for wraping model
     # execute trainer
     trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed)
+
+    # ADDED CODE
     print(output_dir)
     trainer._save_checkpoint(epoch=0)
+    google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
+    shutil.copy(f"{output_dir}/epoch_{num_epochs}_checkpoint", f"{google_drive_dir}/epoch_{num_epochs}_checkpoint")
+    print("save done")
 
     if distributed_strategy == "ddp":
         destroy_process_group()
