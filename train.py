@@ -414,9 +414,9 @@ if __name__ == "__main__":
     # ADDED CODE
     print("output_dir: ",output_dir)
     trainer._save_checkpoint(epoch=0)
-    google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
-    shutil.copytree(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
-    print("save done")
+    # google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
+    # shutil.copytree(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
+    # print("save done")
     
 
     if distributed_strategy == "ddp":
