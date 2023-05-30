@@ -357,6 +357,7 @@ if __name__ == "__main__":
 
     # ADDED CODE
     mixed_precision_dtype = torch.float16
+    output_dir = OUTPUT_DIR
 
     learning_rate = 3e-4
     lr_scheduler_type = "cosine"
@@ -404,6 +405,7 @@ if __name__ == "__main__":
     # set ddp for wraping model
     # execute trainer
     trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed)
+    print(output_dir)
     trainer._save_checkpoint(epoch=0)
 
     if distributed_strategy == "ddp":
