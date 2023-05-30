@@ -354,10 +354,8 @@ if __name__ == "__main__":
 
     size_valid_set = 0.1
     max_length = 512
-    # num_epochs = 10
-    num_epochs = 1
-    # batch_size = 4
-    batch_size = 2
+    num_epochs = 10
+    batch_size = 4
     gradient_accumulation_steps = 16
 
     # ADDED CODE
@@ -413,7 +411,7 @@ if __name__ == "__main__":
 
     # ADDED CODE
     print("output_dir: ",output_dir)
-    trainer._save_checkpoint(epoch=0)
+    trainer._save_checkpoint(epoch=num_epochs-1)
     # google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
     # shutil.copytree(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     # print("save done")
