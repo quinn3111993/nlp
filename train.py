@@ -415,8 +415,8 @@ if __name__ == "__main__":
     trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed)
 
     # ADDED CODE
-    print("output_dir: ", output_dir)
-    trainer._save_checkpoint(epoch=num_epochs - 1)
+    # print("output_dir: ", output_dir)
+    # trainer._save_checkpoint(epoch=num_epochs - 1)
     # google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
     # shutil.copytree(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     # print("save done")
