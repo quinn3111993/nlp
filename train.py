@@ -340,7 +340,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 
 if __name__ == "__main__":
-    OUTPUT_DIR = "/kaggle/working/nlp/checkpoints/"
+    OUTPUT_DIR = "checkpoints/"
     DRIVER_DATA_PATH = "https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing"
 
     backend = "nccl"
@@ -416,6 +416,12 @@ if __name__ == "__main__":
     google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
     shutil.copy(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     print("save done")
+
+    # save model checkpoint to google drive url
+    trainer._save_checkpoint(epoch=0)
+    google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
+    shutil.copy(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
+    
 
     if distributed_strategy == "ddp":
         destroy_process_group()
