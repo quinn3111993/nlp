@@ -417,11 +417,6 @@ if __name__ == "__main__":
     google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
     shutil.copy(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     print("save done")
-
-    # save model checkpoint to google drive url
-    trainer._save_checkpoint(epoch=0)
-    google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
-    shutil.copy(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     
 
     if distributed_strategy == "ddp":
