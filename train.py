@@ -186,11 +186,11 @@ class Trainer:
         # save checkpoints
         if self.is_ddp_training and _is_master_process():
             print("calling save checkpoint in ddp training")
-            self.model.module.save_pretrained(f"epoch_{epoch}_checkpoint")
+            self.model.module.save_pretrained(f"{path_dir}/epoch_{epoch}_checkpoint")
             print("calling save checkpoint in ddp training after save pretrain")
             print(os.getcwd())
         else:
-            self.model.save_pretrained(f"epoch_{epoch}_checkpoint")
+            self.model.save_pretrained(f"{path_dir}/epoch_{epoch}_checkpoint")
 
     def prepare_dataloader(self, train_dataset, eval_dataset):
         # TODO: Prepare the training DataLoader. Initialize 'DataLoader' with 'train_dataset'
