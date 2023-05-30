@@ -385,6 +385,7 @@ if __name__ == "__main__":
 
         # Initialize the process group ### YOUR CODE HERE ###
         local_rank = int(os.environ["LOCAL_RANK"])
+        print("local_rank: ",local_rank)
         init_process_group(backend=backend, world_size=2, rank=local_rank)
     else:
         os.environ["RANK"] = "0"
