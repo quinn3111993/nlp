@@ -403,7 +403,8 @@ if __name__ == "__main__":
 
     # set ddp for wraping model
     # execute trainer
-    trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed, output_dir=OUTPUT_DIR)
+    trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed)
+    trainer._save_checkpoint(epoch=0)
 
     if distributed_strategy == "ddp":
         destroy_process_group()
