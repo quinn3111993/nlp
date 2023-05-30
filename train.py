@@ -186,6 +186,7 @@ class Trainer:
         if self.is_ddp_training and _is_master_process():
             print("calling save checkpoint in ddp training")
             self.model.module.save_pretrained(f"epoch_{epoch}_checkpoint")
+            print("calling save checkpoint in ddp training after save pretrain")
         else:
             self.model.save_pretrained(f"epoch_{epoch}_checkpoint")
 
