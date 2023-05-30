@@ -188,6 +188,7 @@ class Trainer:
             print("calling save checkpoint in ddp training")
             self.model.module.save_pretrained(f"epoch_{epoch}_checkpoint")
             print("calling save checkpoint in ddp training after save pretrain")
+            print(os.getcwd())
         else:
             self.model.save_pretrained(f"epoch_{epoch}_checkpoint")
 
