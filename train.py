@@ -83,7 +83,9 @@ class Trainer:
             self.ctx = nullcontext()
         else:
             # TODO Otherwise, use 'torch.amp.autocast' context with the specified dtype, and initialize GradScaler if mixed_precision_dtype is float16.
-            self.ctx = torch.amp.autocast(device_type='cuda', dtype=mixed_precision_dtype)
+            self.ctx = torch.amp.autocast(
+                device_type="cuda", dtype=mixed_precision_dtype
+            )
             self.gradscaler = GradScaler()
 
     def _set_ddp_training(self):
@@ -91,9 +93,7 @@ class Trainer:
         # You would need to pass the model and specify the device IDs
         # and output device for the data parallelism.
         self.model = torch.nn.parallel.DistributedDataParallel(
-            self.model,
-            device_ids=[self.gpu_id],
-            output_device=self.gpu_id
+            self.model, device_ids=[self.gpu_id], output_device=self.gpu_id
         )
 
     def _run_batch(self, batch):
@@ -205,7 +205,7 @@ class Trainer:
             sampler=DistributedSampler(train_dataset) if self.is_ddp_training else None,
             collate_fn=DataCollatorForSeq2Seq(
                 tokenizer=self.tokenizer, padding=True, return_tensors="pt"
-            )
+            ),
         )
 
         # TODO: Prepare the evaluation DataLoader. Initialize 'DataLoader' with 'eval_dataset',
@@ -319,7 +319,9 @@ def load_pretrained_model(local_rank, model_path: str = ""):
     # Make sure to set 'device_map' to '{"": torch.device(f"cuda:{local_rank}")}' for DDP training.
 
     model = AutoModelForCausalLM.from_pretrained(
-        model_path, torch_dtype=torch.float16, device_map={"": torch.device(f"cuda:{local_rank}")}
+        model_path,
+        torch_dtype=torch.float16,
+        device_map={"": torch.device(f"cuda:{local_rank}")},
     )
 
     # TODO: Create a LoraConfig with the parameters: r=8, lora_alpha=16,
@@ -382,8 +384,11 @@ if __name__ == "__main__":
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
 
         # Initialize the process group ### YOUR CODE HERE ###
-        init_process_group(backend=backend, world_size=2)
+        os.environ['MASTER_ADDR'] = 'localhost'
+        os.environ['MASTER_PORT'] = '12355'
+
         local_rank = int(os.environ["LOCAL_RANK"])
+        init_process_group(backend=backend, world_size=2, rank=local_rank)
     else:
         os.environ["RANK"] = "0"
         local_rank = 0
@@ -400,7 +405,7 @@ if __name__ == "__main__":
         max_length=max_length,
         batch_size=batch_size,
         gpu_id=local_rank,
-        mixed_precision_dtype = mixed_precision_dtype,
+        mixed_precision_dtype=mixed_precision_dtype,
         tokenizer=tokenizer,
         output_dir=OUTPUT_DIR,
         is_ddp_training=True if distributed_strategy == "ddp" else False,
@@ -412,12 +417,11 @@ if __name__ == "__main__":
     trainer.run(data_path=data_path, size_valid_set=size_valid_set, seed=seed)
 
     # ADDED CODE
-    print("output_dir: ",output_dir)
-    trainer._save_checkpoint(epoch=num_epochs-1)
+    print("output_dir: ", output_dir)
+    trainer._save_checkpoint(epoch=num_epochs - 1)
     # google_drive_dir = '/content/gdrive/My Drive/Colab_Notebooks/VietAI_Assignment_2/checkpoints'
     # shutil.copytree(f"{output_dir}epoch_0/epoch_0_checkpoint", google_drive_dir)
     # print("save done")
-    
 
     if distributed_strategy == "ddp":
         destroy_process_group()
