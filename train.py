@@ -384,9 +384,6 @@ if __name__ == "__main__":
         # After that, you should set the 'local_rank' from the environment variable 'LOCAL_RANK'.
 
         # Initialize the process group ### YOUR CODE HERE ###
-        os.environ['MASTER_ADDR'] = 'localhost'
-        os.environ['MASTER_PORT'] = '12355'
-
         local_rank = int(os.environ["LOCAL_RANK"])
         init_process_group(backend=backend, world_size=2, rank=local_rank)
     else:
