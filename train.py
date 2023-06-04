@@ -177,7 +177,6 @@ class Trainer:
         return epoch_loss
 
     def _save_checkpoint(self, epoch):
-        print("calling save checkpoint")
         path_dir = f"{self.output_dir}/epoch_{epoch}"
 
         # check path_dir exited
@@ -186,9 +185,7 @@ class Trainer:
 
         # save checkpoints
         if self.is_ddp_training and _is_master_process():
-            print("calling save checkpoint in ddp training")
             self.model.module.save_pretrained(f"{path_dir}/epoch_{epoch}_checkpoint")
-            print("calling save checkpoint in ddp training after save pretrain")
             print(os.getcwd())
         else:
             self.model.save_pretrained(f"{path_dir}/epoch_{epoch}_checkpoint")
