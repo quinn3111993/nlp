@@ -22,7 +22,7 @@ def generate_inference(instruction: str, user_inp: str, model_path:str, lora_wei
     top_k=40
     top_p=128
     temperature=0.1
-    lora_weights_path='adapter_model.bin'
+    lora_weights_path=lora_weights_path
     load_8bit=True
     num_beams =1
     max_new_tokens =128
